@@ -16,6 +16,7 @@ with open('export.csv', 'w', newline='') as file:
     runningDuration = 0
     trackCount = 0
     aSideTotal = -1
+    bDurationRemaining = cassettePlayTime/2*60*1000
     for track in results["items"]:
         artist = (track["track"]["artists"][0]["name"])
         trackName = (track["track"]["name"])
@@ -33,5 +34,9 @@ with open('export.csv', 'w', newline='') as file:
             aSideTotal+=1
         else:
             trackNum="B"+str(trackCount-aSideTotal)
+            bDurationRemaining-=durationms
         writer.writerow([trackNum,trackName,artist,albumName,duration])
+        if (bDurationRemaining<0):
+            print(trackName +" would run over your total time limit")
+            break
 print(runningDuration)
